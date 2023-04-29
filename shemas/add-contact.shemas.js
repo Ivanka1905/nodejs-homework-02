@@ -23,6 +23,7 @@ const addContactSchema = Joi.object({
     "string.empty": `"" must contain value`,
     "any.required": `"" is a required field`,
   }),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
