@@ -7,6 +7,7 @@ const updateContactSchema = Joi.object({
     tlds: { allow: ["com", "net", "org", "uk"] },
   }),
   phone: Joi.string().min(5).max(13),
+  favorite: Joi.boolean(),
 })
   .min(1)
   .required();
