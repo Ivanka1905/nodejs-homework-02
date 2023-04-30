@@ -14,8 +14,13 @@ const contactSchema = mongoose.Schema({
     favorite: {
       type: Boolean,
       default: false,
-    },
-})
+  },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    }
+},
+)
 
 const ContactModel = mongoose.model('contact', contactSchema)
 
