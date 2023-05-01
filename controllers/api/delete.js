@@ -1,22 +1,17 @@
 const { ContactModel } = require("../../models/db-contact");
+const { errorService } = require("../../services");
 
 async function deleteContact(req, res, next) {
-  try {
-    const contact = await ContactModel.findByIdAndDelete(req.params.id).catch(
-      () => {
-        const err = Error(`Contact id "${req.params.id}" is not correct`);
-        err.code = 400;
-        throw err;
-      }
-    );
-
-    if (contact === null) {
-      return res.status(404).json({ message: "Not found" });
+  const contact = await ContactModel.findByIdAndDelete(req.params.id).catch(
+    () => {
+      throw errorService(`Contact id "${req.params.id}" is not correct`, 400);
     }
-    res.json("contact deleted");
-  } catch (error) {
-    next(error);
+  );
+
+  if (contact === null) {
+    throw errorService("Not found", 404);
   }
+  res.json("contact deleted");
 }
 
 module.exports = {

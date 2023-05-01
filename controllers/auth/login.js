@@ -1,25 +1,40 @@
 const { UserModel } = require("../../models/user.model");
 const bcrypt = require("bcrypt");
+const { errorService, createJWT } = require("../../services");
+const crypto = require("crypto");
+const { addUserShema } = require("../../shemas");
 
 const login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
+  
+      const { email, password } = req.body;
+      const { error } = addUserShema.validate({
+      email,
+      password,
+    });
+    if (error) {
+      throw errorService(error.message, 400);
+      }
+      
     const user = await UserModel.findOne({ email });
     if (!user) {
-      const err = new Error("Email or password is wrong");
-      err.code = 404;
-      throw err;
+      throw errorService("Email or password is wrong", 404);
     }
 
     const match = await bcrypt.compare(password, user.passwordHash);
-    if (!match) {
-      res.status(401).json("Email or password is wrong");
-      return;
+      if (!match) {
+        throw errorService("Email or password is wrong", 401);
+
     }
-    res.json({ token: "sfcgv" });
-  } catch (error) {
-    next(error);
-  }
+    const sessionKey = crypto.randomUUID();
+    await UserModel.findByIdAndUpdate(user._id, { sessionKey });
+
+    const accessJWT = createJWT({
+      userId: String(user._id),
+      sessionKey,
+    });
+
+      res.json({ token: accessJWT, user: {email: user.email, subscription: user.subscription} });
+  
 };
 
 module.exports = {

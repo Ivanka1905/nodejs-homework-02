@@ -1,20 +1,15 @@
 const { ContactModel } = require("../../models/db-contact");
+const { errorService } = require("../../services");
 
 async function getOne(req, res, next) {
-  try {
-    const contact = await ContactModel.findById(req.params.id).catch(() => {
-      const err = Error(`Contact id "${req.params.id}" is not correct`);
-      err.code = 400;
-      throw err;
-    });
+  const contact = await ContactModel.findById(req.params.id).catch(() => {
+    throw errorService(`Contact id "${req.params.id}" is not correct`, 400);
+  });
 
-    if (contact === null) {
-      return res.status(404).send({ message: "Not found" });
-    }
-    res.json(contact);
-  } catch (error) {
-    next(error);
+  if (contact === null) {
+    throw errorService("Not found", 404);
   }
+  res.json(contact);
 }
 
 module.exports = {
