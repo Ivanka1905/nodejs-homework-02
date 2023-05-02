@@ -24,6 +24,9 @@ const userSchema = mongoose.Schema(
       default: null,
       trim: true,
     },
+    avatarURL: {
+      type: String,
+    }
   },
   {
     versionKey: false,
