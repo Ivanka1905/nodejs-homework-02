@@ -32,6 +32,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Verify token is required"],
     },
+    avatarURL: {
+      type: String,
+    }
   },
   {
     versionKey: false,

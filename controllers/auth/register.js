@@ -8,6 +8,7 @@ const {
 const { addUserShema } = require("../../shemas");
 const crypto = require("crypto");
 const { nanoid } = require("nanoid");
+const gravatar = require("gravatar");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -20,12 +21,13 @@ const register = async (req, res, next) => {
   }
   const passwordHash = await createHash(password);
   const verificationToken = nanoid();
+  const avatarUrl = gravatar.url(email);
   const newUser = await UserModel.create({
+    avatarUrl,
     email,
     passwordHash,
     verificationToken,
-  }).catch((error) => {
-    console.log(error);
+  }).catch(() => {
     throw errorService("Email in use", 409);
   });
 
@@ -45,6 +47,7 @@ const register = async (req, res, next) => {
     token: accessJWT,
     user: { email, subscription: newUser.subscription },
   });
+
 };
 
 module.exports = {

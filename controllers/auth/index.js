@@ -3,6 +3,7 @@ const { login } = require("./login");
 const { logout } = require("./logout");
 const { register } = require("./register");
 const { secondTryVerify } = require("./second-try-verify");
+const { updAvatar } = require("./upd-avatar");
 const { updSubscription } = require("./upd-subscription");
 const { verifyEmail } = require("./verify-email");
 
@@ -14,4 +15,5 @@ module.exports = {
     updSubscription,
     verifyEmail,
     secondTryVerify,
+    updAvatar,
 } 
