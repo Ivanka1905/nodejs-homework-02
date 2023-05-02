@@ -5,6 +5,8 @@ const {
   logout,
   current,
   updSubscription,
+  verifyEmail,
+  secondTryVerify,
   updAvatar,
 } = require("../../controllers/auth");
 const { controller } = require("../../services");
@@ -17,6 +19,10 @@ router.post("/login", controller(login));
 router.post("/logout", userAuthMidleware, controller(logout));
 router.get("/current", userAuthMidleware, controller(current));
 router.patch("/", userAuthMidleware, controller(updSubscription));
+
+router.get("/verify/:verificationToken", controller(verifyEmail));
+router.post('/verify', controller(secondTryVerify))
+
 router.patch(
   "/avatars",
   userAuthMidleware,
